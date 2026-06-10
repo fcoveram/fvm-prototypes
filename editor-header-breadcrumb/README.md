@@ -2,7 +2,7 @@
 
 A prototype exploring a breadcrumb-style document bar for the WordPress block editor — replacing the flat document title with a hierarchical trail (e.g. *Blog Home / Pattern / My pattern*) plus a document-actions menu. It shows three variants for how the current document item could behave.
 
-**Live demo:** https://fvm.house/prototype/editor-header-breadcrumb/
+**Live demo:** https://prototypes.fvm.house/editor-header-breadcrumb/
 
 ## How it was made
 
