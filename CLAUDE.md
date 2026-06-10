@@ -56,15 +56,22 @@ After a push, check the Vercel deployment, then:
 `curl -sIL https://prototypes.fvm.house/<name>/` → `HTTP 200`; the page `<title>`
 and `./assets/*.js|css` should return 200.
 
-## Setup (one-time — already done)
-- Repo `fcoveram/fvm-prototypes` = this folder. Keep all git scoped here with
+## Setup (one-time — done & live)
+- **Repo** `fcoveram/fvm-prototypes` = this folder. Keep all git scoped here with
   `git -C ~/Code/Prototypes …`. ⚠️ `~` itself is an accidental empty git repo —
   never run git against it.
-- One Vercel project building the monorepo (`buildCommand: npm run build`,
-  `outputDirectory: dist`, Node 22), domain `prototypes.fvm.house` (DNS CNAME → Vercel).
+- **Vercel:** one project builds the monorepo (`buildCommand: npm run build`,
+  `outputDirectory: dist`, Node 22); HTTPS is auto-provisioned.
+- **DNS (Namecheap):** fvm.house's DNS lives in Namecheap → Advanced DNS. The
+  subdomain is a single CNAME record — Host `prototypes`, Value `cname.vercel-dns.com`.
+  Already in place; new prototypes are just paths under it and need no DNS changes.
 
 ## Gotchas
 - Every prototype needs `base: './'`, an in-sync `package-lock.json`, and the
   `.npmrc` `legacy-peer-deps=true`.
+- Caching is automatic on Vercel — hashed JS/CSS are immutable and each deploy
+  serves a fresh `index.html`; **no manual cache purge** needed.
+- An earlier approach copied builds onto Pressable (`/htdocs/prototype/…`); it is
+  **fully retired** — do not store prototype files on Pressable.
 - `prototypes.fvm.house/` (root, no `<name>`) has no landing page yet — intentionally
   blank for now.
