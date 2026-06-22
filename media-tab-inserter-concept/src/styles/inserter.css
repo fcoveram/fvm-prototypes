@@ -1,0 +1,335 @@
+/*
+ * Layout + presentational glue for the Media tab inserter concept.
+ *
+ * Controls come from @wordpress/components; colors/spacing use the design-system
+ * `--wpds-*` tokens (from @wordpress/theme/design-tokens.css) with hardcoded WP
+ * admin fallbacks so styling never silently breaks if a token name shifts. The
+ * unpin button mirrors Gutenberg PR #79217's detach-button treatment.
+ */
+
+/* ------------------------------------------------------------------ *
+ * Editor chrome (minimal, non-functional — frames the left inserter) *
+ * ------------------------------------------------------------------ */
+.editor {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: var( --wpds-color-bg-surface-neutral-weak, #f0f0f0 );
+}
+
+.editor__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	height: 60px;
+	padding: 0 12px;
+	background: #fff;
+	border-bottom: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
+	flex-shrink: 0;
+}
+
+.editor__header-group {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.editor__body {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+}
+
+.editor__canvas {
+	flex: 1;
+	min-width: 0;
+	overflow: auto;
+	display: flex;
+	justify-content: center;
+	padding: 32px 24px;
+}
+
+.editor__page {
+	width: 100%;
+	max-width: 620px;
+	align-self: flex-start;
+	background: #fff;
+	border-radius: 2px;
+	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.08 ), 0 0 0 1px rgba( 0, 0, 0, 0.04 );
+	padding: 56px 64px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	min-height: 460px;
+}
+
+.editor__line {
+	height: 14px;
+	width: 100%;
+	border-radius: 3px;
+	background: #f0f0f0;
+}
+
+.editor__line--title {
+	height: 30px;
+	width: 70%;
+	background: #e4e4e4;
+	margin-bottom: 12px;
+}
+
+.editor__line--short {
+	width: 45%;
+}
+
+/* ------------------------------------------------------------------ *
+ * Inserter panel shell                                               *
+ * ------------------------------------------------------------------ */
+.inserter {
+	width: 350px;
+	min-width: 350px;
+	flex-shrink: 0;
+	height: 100%;
+	background: #fff;
+	border-right: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+/* Tab strip: Blocks / Patterns / Media + close (✕) on the same row */
+.inserter-tabs {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 48px;
+	padding-right: 8px;
+	border-bottom: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
+	flex-shrink: 0;
+}
+
+.inserter-tabs__list {
+	display: flex;
+	height: 100%;
+	padding-left: 8px;
+}
+
+.inserter-tabs__tab {
+	appearance: none;
+	border: 0;
+	background: none;
+	margin: 0;
+	padding: 0 12px;
+	height: 100%;
+	font-family: inherit;
+	font-size: 13px;
+	line-height: 1;
+	color: var( --wpds-color-fg-content-neutral-weak, #757575 );
+	cursor: pointer;
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+}
+
+.inserter-tabs__tab:hover {
+	color: var( --wpds-color-fg-content-neutral, #1e1e1e );
+}
+
+.inserter-tabs__tab.is-active {
+	color: var( --wpds-color-fg-content-neutral, #1e1e1e );
+	font-weight: 500;
+	box-shadow: inset 0 -1.5px 0 0 currentColor;
+}
+
+.inserter-tabs__tab:focus-visible {
+	outline: 1.5px solid var( --wpds-color-stroke-focus-brand, #3858e9 );
+	outline-offset: -1.5px;
+	border-radius: 2px;
+}
+
+.inserter__content {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+.inserter__placeholder {
+	padding: 32px 24px;
+	color: var( --wpds-color-fg-content-neutral-weak, #757575 );
+	font-size: 13px;
+	line-height: 1.6;
+	text-align: center;
+}
+
+.inserter__placeholder p {
+	margin: 0 0 8px;
+}
+
+.inserter__placeholder strong {
+	color: var( --wpds-color-fg-content-neutral, #1e1e1e );
+}
+
+/* ------------------------------------------------------------------ *
+ * Media accordion (Panel + PanelBody)                                *
+ * ------------------------------------------------------------------ */
+.media-accordion.components-panel {
+	border-left: 0;
+	border-right: 0;
+	border-top: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Media browser: search row + content                                *
+ * ------------------------------------------------------------------ */
+.media-browser {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.media-browser__search {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.media-browser__search-input {
+	flex: 1;
+	min-width: 0;
+}
+
+.media-browser__search-input.components-base-control {
+	margin-bottom: 0;
+}
+
+.media-browser__search .components-dropdown {
+	flex-shrink: 0;
+}
+
+.media-browser__empty {
+	margin: 0;
+	color: var( --wpds-color-fg-content-neutral-weak, #757575 );
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.media-browser__add.components-button {
+	width: 100%;
+	justify-content: center;
+}
+
+/* ------------------------------------------------------------------ *
+ * Groups + thumbnail grid                                            *
+ * ------------------------------------------------------------------ */
+.media-group {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.media-group__label {
+	margin: 0;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.4;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var( --wpds-color-fg-content-neutral-weak, #757575 );
+}
+
+.media-grid {
+	display: grid;
+	grid-template-columns: repeat( 3, 1fr );
+	gap: 8px;
+}
+
+.media-thumb {
+	position: relative;
+	aspect-ratio: 1 / 1;
+	border-radius: var( --wpds-border-radius-sm, 4px );
+	overflow: hidden;
+	background: var( --wpds-color-bg-surface-neutral-weak, #f0f0f0 );
+}
+
+.media-thumb__image {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+}
+
+.media-thumb__audio {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 8px;
+	text-align: center;
+	background: hsl( var( --thumb-hue ) 30% 92% );
+	color: hsl( var( --thumb-hue ) 40% 40% );
+}
+
+.media-thumb__audio svg {
+	fill: currentColor;
+}
+
+.media-thumb__audio-name {
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.3;
+	color: hsl( var( --thumb-hue ) 34% 28% );
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ *
+ * Unpin button on Pinned tiles — mirrors Gutenberg PR #79217         *
+ * ------------------------------------------------------------------ */
+.media-thumb__unpin.components-button.has-icon {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	z-index: 1;
+	width: 24px;
+	min-width: 24px;
+	height: 24px;
+	padding: 0;
+	border-radius: 2px;
+	color: #1e1e1e;
+	background: #fff;
+	box-shadow: 0 0 0 1px rgba( 0, 0, 0, 0.12 ), 0 1px 2px rgba( 0, 0, 0, 0.12 );
+	opacity: 0;
+	pointer-events: none;
+}
+
+.media-thumb__unpin.components-button.has-icon:hover,
+.media-thumb__unpin.components-button.has-icon:focus,
+.media-thumb__unpin.components-button.has-icon:active {
+	color: #1e1e1e;
+	background: #fff;
+}
+
+@media not ( prefers-reduced-motion ) {
+	.media-thumb__unpin.components-button.has-icon {
+		transition: opacity 0.1s linear;
+	}
+}
+
+.media-thumb:hover .media-thumb__unpin,
+.media-thumb:focus-within .media-thumb__unpin,
+.media-thumb__unpin.components-button.has-icon:focus-visible {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+@media ( hover: none ) {
+	.media-thumb__unpin.components-button.has-icon {
+		opacity: 1;
+		pointer-events: auto;
+	}
+}
