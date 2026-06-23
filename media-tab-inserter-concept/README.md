@@ -25,9 +25,6 @@ the open panel's content scrolls.
 - **Filter menus** — the settings/sliders button beside each search filters the grouped
   panels by All / Images / Audio, and the web panel by Images / Audio.
 
-The layout follows a Figma wireframe; the hover unpin treatment follows Gutenberg PR
-[#79217](https://github.com/WordPress/gutenberg/pull/79217).
-
 ## How it was made
 
 A standalone Vite + React app built from the WordPress Design System — no custom UI library:
