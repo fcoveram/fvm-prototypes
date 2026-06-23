@@ -3,26 +3,23 @@ import InserterTabs from './InserterTabs.jsx';
 import MediaTab from './MediaTab.jsx';
 
 /*
- * The left inserter panel. Holds the active-tab state and renders the matching
- * tab panel below the tab strip. Only the Media tab is built out — Blocks and
+ * The inserter panel. Holds the active-tab state and renders the matching tab
+ * panel below the tab strip. Only the Media tab is built out — Blocks and
  * Patterns show a light placeholder, since this concept is about the Media tab.
  */
-export default function InserterSidebar( { onClose } ) {
+export default function InserterSidebar() {
 	const [ activeTab, setActiveTab ] = useState( 'media' );
 
 	return (
 		<div className="inserter">
-			<InserterTabs
-				active={ activeTab }
-				onChange={ setActiveTab }
-				onClose={ onClose }
-			/>
+			<InserterTabs active={ activeTab } onChange={ setActiveTab } />
 			<div className="inserter__content">
 				{ activeTab === 'media' ? (
 					<div
 						id="inserter-panel-media"
 						role="tabpanel"
 						aria-labelledby="inserter-tab-media"
+						className="inserter__panel"
 					>
 						<MediaTab />
 					</div>
