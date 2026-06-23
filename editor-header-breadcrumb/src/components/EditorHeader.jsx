@@ -2,7 +2,6 @@
  * EditorHeader
  *
  * Reconstructs the block editor toolbar using @wordpress/ui components.
- * Design reference: https://www.figma.com/design/61XvHsq3I7yipitlk7RmmB/Editor-s-header?node-id=17-5388
  *
  * Three regions — left toolbar / center breadcrumb / right toolbar.
  * Left and right toolbars are identical across all three design versions.
@@ -72,7 +71,7 @@ export default function EditorHeader( { scenario } ) {
 
 	return (
 		<header style={ styles.header } role="banner">
-			{ /* ── Left toolbar (Figma node 17:4964 / 17:5198 / 17:5250) ── */ }
+			{ /* ── Left toolbar ── */ }
 			<div style={ styles.toolbar }>
 				<Button
 					variant="outline"
@@ -83,7 +82,7 @@ export default function EditorHeader( { scenario } ) {
 					Exit
 				</Button>
 
-				{ /* Block inserter — solid brand style matches Figma */ }
+				{ /* Block inserter — solid brand style */ }
 				<IconButton
 					icon={ plus }
 					label="Toggle block inserter"
@@ -135,7 +134,7 @@ export default function EditorHeader( { scenario } ) {
 				/>
 			</div>
 
-			{ /* ── Right toolbar (Figma node 17:4971 / 17:5302 / 17:5345) ── */ }
+			{ /* ── Right toolbar ── */ }
 			<div style={ styles.toolbar }>
 				{ /* Preview — desktop icon */ }
 				<IconButton
