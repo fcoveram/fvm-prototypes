@@ -6,17 +6,19 @@ This folder (`~/Code/Prototypes/`) **is a monorepo**: one Git repo
 Vite + React app in its own subfolder.
 
 ## Working on a prototype — local-first (read this first)
-**Default to local-only. Never deploy without the user's explicit go-ahead.** Vercel
+**Default to local-only. Never deploy without the user's explicit request.** Vercel
 auto-deploys on every push to `main`, so any commit pushed to the repo is a public deploy —
 treat *pushing* as *publishing*.
 
 - Build and iterate **only on the user's machine**: edit files, run `npm run dev` /
   `npm run build`, verify locally. Do **not** commit, push, open PRs, or merge while
   iterating.
-- **When you finish a round of changes, end the turn by asking whether to deploy** — a short
-  suggestion like "Want me to deploy this, or keep iterating locally?" Default to local.
-- Deploy **only** on an explicit yes. If the user says no (or hasn't answered), leave
-  everything local and keep working — never touch the public version.
+- **Do not ask whether to deploy.** When a round of changes is done, keep everything local
+  and stay quiet about publishing — no prompts, no "want me to deploy?" suggestions. Just
+  report what changed and keep working locally.
+- **Wait for the user to explicitly ask to go public** (e.g. "deploy this", "make it
+  public", "ship it", "go public"). Only that request triggers the *Deploy* workflow below;
+  until then, everything stays local and the public version is untouched.
 
 ## Hosting model
 - Prototypes are hosted on **Vercel** (one project for the whole monorepo).
@@ -65,8 +67,9 @@ WordPress Design System — no custom UI styling.">
 Run locally with `npm install && npm run dev`.
 ```
 
-## Deploy (only after the user approves)
-Run these **only once the user has said yes** to deploying:
+## Deploy (only when the user asks to go public)
+Run these **only when the user explicitly asks to publish** (e.g. "go public", "deploy
+this", "ship it"):
 1. Branch off `main` — never commit straight to `main`:
    `git -C ~/Code/Prototypes checkout -b <branch>`. Always scope git with
    `git -C ~/Code/Prototypes …`; `~` itself is an accidental empty git repo.
