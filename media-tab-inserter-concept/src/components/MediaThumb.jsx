@@ -1,21 +1,22 @@
-import { Button, Icon } from '@wordpress/components';
+import { Icon } from '@wordpress/components';
+import { IconButton } from '@wordpress/ui';
 import { closeSmall, audio as audioIcon } from '@wordpress/icons';
+import photo from '../assets/photo.jpg';
+import MediaItemMenu from './MediaItemMenu.jsx';
 
 /*
- * Builds an abstract, deterministic gradient "photo" from an item's hue. Layered
- * radial + linear stops give each tile a bit of depth so the grid reads as media
- * rather than flat swatches — while staying fully self-contained (no network).
+ * A single media tile. Images all render the same bundled sample photo, cropped
+ * square; audio renders a tinted tile with an audio glyph + name.
+ *
+ * The top-right action (revealed on hover/focus) is either:
+ *   - an unpin IconButton  (Pinned tiles, via `onUnpin`), or
+ *   - a "more" menu         (Media Library / From the web image tiles, via `menu`).
+ * Audio tiles in the library/web have no menu — the actions are image-specific.
  */
-function imageBackground( hue ) {
-	const accent = ( hue + 38 ) % 360;
-	return (
-		`radial-gradient(120% 120% at 18% 12%, hsl(${ hue } 88% 74% / 0.95), transparent 55%), ` +
-		`linear-gradient(135deg, hsl(${ hue } 66% 55%), hsl(${ accent } 60% 40%))`
-	);
-}
-
-export default function MediaThumb( { item, onUnpin } ) {
+export default function MediaThumb( { item, onUnpin, menu } ) {
 	const isAudio = item.type === 'audio';
+	const showUnpin = Boolean( onUnpin );
+	const showMenu = Boolean( menu ) && item.type === 'image';
 
 	return (
 		<div className={ `media-thumb media-thumb--${ item.type }` } title={ item.name }>
@@ -34,26 +35,37 @@ export default function MediaThumb( { item, onUnpin } ) {
 					<span className="media-thumb__audio-name">{ item.name }</span>
 				</div>
 			) : (
-				<div
+				<img
 					className="media-thumb__image"
-					style={ { backgroundImage: imageBackground( item.hue ) } }
-					role="img"
-					aria-label={ item.name }
+					src={ photo }
+					alt={ item.name }
+					loading="lazy"
+					draggable="false"
 				/>
 			) }
 
-			{ onUnpin && (
-				<Button
-					className="media-thumb__unpin"
-					icon={ closeSmall }
-					label={ `Unpin ${ item.name }` }
-					size="compact"
-					variant="tertiary"
-					onClick={ ( event ) => {
-						event.stopPropagation();
-						onUnpin( item.id );
-					} }
-				/>
+			{ ( showUnpin || showMenu ) && (
+				<div className="media-thumb__action">
+					{ showUnpin ? (
+						<IconButton
+							icon={ closeSmall }
+							label={ `Unpin ${ item.name }` }
+							variant="minimal"
+							tone="neutral"
+							size="small"
+							onClick={ ( event ) => {
+								event.stopPropagation();
+								onUnpin( item.id );
+							} }
+						/>
+					) : (
+						<MediaItemMenu
+							item={ item }
+							actionLabel={ menu.actionLabel }
+							onAction={ () => menu.onAction( item ) }
+						/>
+					) }
+				</div>
 			) }
 		</div>
 	);

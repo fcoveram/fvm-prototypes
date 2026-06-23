@@ -2,43 +2,61 @@
  * Deterministic mock media for the prototype — no network, no real media
  * library, no Openverse. Each item is:
  *
- *   { id, type: 'image' | 'audio', name, hue }
+ *   image → { id, type: 'image', name }
+ *   audio → { id, type: 'audio', name, hue }
  *
- * `hue` (0–360) drives the placeholder gradient (see MediaThumb); `name` drives
- * search matching, image alt text, and the audio caption. Hues are spaced by the
- * golden angle so adjacent tiles always look distinct.
+ * Every image renders the same bundled sample photo (see MediaThumb); `name`
+ * drives search + alt text, and the audio `hue` tints its placeholder tile.
+ * Media Library and From the web carry ~3× the images so their panels overflow
+ * and scroll.
  */
 
-let nextId = 0;
 const GOLDEN_ANGLE = 137.508;
 
-function makeItems( type, names, hueSeed ) {
+const IMAGE_NAMES = [
+	'Sunset cliffs',
+	'Forest path',
+	'City rooftop',
+	'Ocean waves',
+	'Desert dunes',
+	'Morning coffee',
+	'Mountain lake',
+	'Autumn leaves',
+	'Studio portrait',
+	'Neon signs',
+	'Snowy peak',
+	'Wildflowers',
+	'Harbor at dawn',
+	'Tropical leaves',
+	'Night skyline',
+];
+
+function makeImages( prefix, count ) {
+	return Array.from( { length: count }, ( _, i ) => {
+		const base = IMAGE_NAMES[ i % IMAGE_NAMES.length ];
+		const wrap = Math.floor( i / IMAGE_NAMES.length );
+		return {
+			id: `${ prefix }-img-${ i }`,
+			type: 'image',
+			name: wrap ? `${ base } ${ wrap + 1 }` : base,
+		};
+	} );
+}
+
+function makeAudio( prefix, names, hueSeed ) {
 	return names.map( ( name, i ) => ( {
-		id: `${ type }-${ nextId++ }`,
-		type,
+		id: `${ prefix }-audio-${ i }`,
+		type: 'audio',
 		name,
 		hue: Math.round( ( hueSeed + i * GOLDEN_ANGLE ) % 360 ),
 	} ) );
 }
 
-// --- Pinned: a small, curated set (matches the wireframe's 8 images + 6 audio).
+// --- Pinned: a small, curated set (8 images + 6 audio).
 export const pinned = [
-	...makeItems(
-		'image',
-		[
-			'Sunset cliffs',
-			'Forest path',
-			'City rooftop',
-			'Ocean waves',
-			'Desert dunes',
-			'Morning coffee',
-			'Mountain lake',
-			'Autumn leaves',
-		],
-		12
-	),
-	...makeItems(
-		'audio',
+	...makeImages( 'pinned', 8 ),
+	...makeAudio(
+		'pinned',
 		[
 			'Intro loop',
 			'Ambient pad',
@@ -51,28 +69,11 @@ export const pinned = [
 	),
 ];
 
-// --- Media Library: the whole library — a larger set of both types.
+// --- Media Library: the whole library — many images (overflows) + audio.
 export const library = [
-	...makeItems(
-		'image',
-		[
-			'Studio portrait',
-			'Neon signs',
-			'Snowy peak',
-			'Wildflowers',
-			'Old bookshop',
-			'Harbor at dawn',
-			'Concrete stairs',
-			'Tropical leaves',
-			'Vintage car',
-			'Latte art',
-			'Rolling hills',
-			'Night skyline',
-		],
-		40
-	),
-	...makeItems(
-		'audio',
+	...makeImages( 'library', 36 ),
+	...makeAudio(
+		'library',
 		[
 			'Acoustic riff',
 			'Lo-fi beat',
@@ -88,32 +89,12 @@ export const library = [
 	),
 ];
 
-// --- From the web (Openverse-flavored, mock). Filtered to one type at a time;
-// images are shown by default before any search.
+// --- From the web (Openverse-flavored, mock). Many images (overflows) + audio;
+// shown one type at a time, images by default.
 export const web = [
-	...makeItems(
-		'image',
-		[
-			'Aerial coastline',
-			'Misty redwoods',
-			'Market stall',
-			'Glass facade',
-			'Sand patterns',
-			'Lavender field',
-			'Street mural',
-			'Frozen lake',
-			'Canyon light',
-			'Paper textures',
-			'Cherry blossom',
-			'Subway tunnel',
-			'Golden wheat',
-			'Coral reef',
-			'Mountain fog',
-		],
-		80
-	),
-	...makeItems(
-		'audio',
+	...makeImages( 'web', 45 ),
+	...makeAudio(
+		'web',
 		[
 			'Cinematic riser',
 			'Forest birdsong',

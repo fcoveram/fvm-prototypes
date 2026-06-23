@@ -1,100 +1,38 @@
 /*
  * Layout + presentational glue for the Media tab inserter concept.
  *
- * Controls come from @wordpress/components; colors/spacing use the design-system
- * `--wpds-*` tokens (from @wordpress/theme/design-tokens.css) with hardcoded WP
- * admin fallbacks so styling never silently breaks if a token name shifts. The
- * unpin button mirrors Gutenberg PR #79217's detach-button treatment.
+ * Controls come from @wordpress/components and @wordpress/ui; colors/spacing use
+ * the design-system `--wpds-*` tokens (from @wordpress/theme/design-tokens.css)
+ * with hardcoded WP admin fallbacks so styling never silently breaks if a token
+ * name shifts.
  */
 
 /* ------------------------------------------------------------------ *
- * Editor chrome (minimal, non-functional — frames the left inserter) *
+ * Stage: the inserter centered on a soft gray backdrop               *
  * ------------------------------------------------------------------ */
-.editor {
-	display: flex;
-	flex-direction: column;
+.stage {
 	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
 	background: var( --wpds-color-bg-surface-neutral-weak, #f0f0f0 );
 }
 
-.editor__header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 8px;
-	height: 60px;
-	padding: 0 12px;
-	background: #fff;
-	border-bottom: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
-	flex-shrink: 0;
-}
-
-.editor__header-group {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-}
-
-.editor__body {
-	display: flex;
-	flex: 1;
-	min-height: 0;
-}
-
-.editor__canvas {
-	flex: 1;
-	min-width: 0;
-	overflow: auto;
-	display: flex;
-	justify-content: center;
-	padding: 32px 24px;
-}
-
-.editor__page {
-	width: 100%;
-	max-width: 620px;
-	align-self: flex-start;
-	background: #fff;
-	border-radius: 2px;
-	box-shadow: 0 1px 3px rgba( 0, 0, 0, 0.08 ), 0 0 0 1px rgba( 0, 0, 0, 0.04 );
-	padding: 56px 64px;
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-	min-height: 460px;
-}
-
-.editor__line {
-	height: 14px;
-	width: 100%;
-	border-radius: 3px;
-	background: #f0f0f0;
-}
-
-.editor__line--title {
-	height: 30px;
-	width: 70%;
-	background: #e4e4e4;
-	margin-bottom: 12px;
-}
-
-.editor__line--short {
-	width: 45%;
-}
-
 /* ------------------------------------------------------------------ *
- * Inserter panel shell                                               *
+ * Inserter panel — fixed-height floating card                        *
  * ------------------------------------------------------------------ */
 .inserter {
 	width: 350px;
-	min-width: 350px;
-	flex-shrink: 0;
-	height: 100%;
-	background: #fff;
-	border-right: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
+	height: 600px;
 	display: flex;
 	flex-direction: column;
 	min-height: 0;
+	background: #fff;
+	border: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
+	border-radius: var( --wpds-border-radius-md, 8px );
+	box-shadow: 0 4px 24px rgba( 0, 0, 0, 0.08 );
+	overflow: hidden;
 }
 
 /* Tab strip: Blocks / Patterns / Media + close (✕) on the same row */
@@ -147,13 +85,31 @@
 	border-radius: 2px;
 }
 
+/* Content area fills the remaining height and never scrolls itself */
 .inserter__content {
 	flex: 1;
 	min-height: 0;
-	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.inserter__content > * {
+	flex: 1;
+	min-height: 0;
+}
+
+.inserter__panel {
+	display: flex;
+	flex-direction: column;
 }
 
 .inserter__placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
 	padding: 32px 24px;
 	color: var( --wpds-color-fg-content-neutral-weak, #757575 );
 	font-size: 13px;
@@ -162,7 +118,7 @@
 }
 
 .inserter__placeholder p {
-	margin: 0 0 8px;
+	margin: 0;
 }
 
 .inserter__placeholder strong {
@@ -170,24 +126,50 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Media accordion (Panel + PanelBody)                                *
+ * Media accordion: only the open panel's body fills + scrolls        *
  * ------------------------------------------------------------------ */
 .media-accordion.components-panel {
-	border-left: 0;
-	border-right: 0;
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	border: 0;
+}
+
+/* Collapsed panels keep their natural (header) height and are pushed aside */
+.media-accordion .components-panel__body {
+	flex-shrink: 0;
+}
+
+.media-accordion .components-panel__body:first-child {
 	border-top: 0;
 }
 
+/* The open panel fills the available height and lays its content out in a column */
+.media-accordion .components-panel__body.is-opened {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.media-accordion .components-panel__body.is-opened > .components-panel__body-title {
+	flex-shrink: 0;
+}
+
 /* ------------------------------------------------------------------ *
- * Media browser: search row + content                                *
+ * Media browser: fixed search row + scrollable results               *
  * ------------------------------------------------------------------ */
 .media-browser {
+	flex: 1;
+	min-height: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
 }
 
 .media-browser__search {
+	flex-shrink: 0;
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -206,6 +188,16 @@
 	flex-shrink: 0;
 }
 
+/* The only scrolling region — appears when content overflows */
+.media-browser__results {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
 .media-browser__empty {
 	margin: 0;
 	color: var( --wpds-color-fg-content-neutral-weak, #757575 );
@@ -214,8 +206,10 @@
 }
 
 .media-browser__add.components-button {
+	flex-shrink: 0;
 	width: 100%;
 	justify-content: center;
+	text-align: center;
 }
 
 /* ------------------------------------------------------------------ *
@@ -252,10 +246,10 @@
 }
 
 .media-thumb__image {
+	display: block;
 	width: 100%;
 	height: 100%;
-	background-size: cover;
-	background-position: center;
+	object-fit: cover;
 }
 
 .media-thumb__audio {
@@ -288,47 +282,36 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Unpin button on Pinned tiles — mirrors Gutenberg PR #79217         *
+ * Tile action (unpin / more-menu): a chip revealed on hover/focus    *
  * ------------------------------------------------------------------ */
-.media-thumb__unpin.components-button.has-icon {
+.media-thumb__action {
 	position: absolute;
 	top: 4px;
 	right: 4px;
 	z-index: 1;
-	width: 24px;
-	min-width: 24px;
-	height: 24px;
-	padding: 0;
+	display: flex;
 	border-radius: 2px;
-	color: #1e1e1e;
 	background: #fff;
 	box-shadow: 0 0 0 1px rgba( 0, 0, 0, 0.12 ), 0 1px 2px rgba( 0, 0, 0, 0.12 );
 	opacity: 0;
 	pointer-events: none;
 }
 
-.media-thumb__unpin.components-button.has-icon:hover,
-.media-thumb__unpin.components-button.has-icon:focus,
-.media-thumb__unpin.components-button.has-icon:active {
-	color: #1e1e1e;
-	background: #fff;
-}
-
 @media not ( prefers-reduced-motion ) {
-	.media-thumb__unpin.components-button.has-icon {
+	.media-thumb__action {
 		transition: opacity 0.1s linear;
 	}
 }
 
-.media-thumb:hover .media-thumb__unpin,
-.media-thumb:focus-within .media-thumb__unpin,
-.media-thumb__unpin.components-button.has-icon:focus-visible {
+.media-thumb:hover .media-thumb__action,
+.media-thumb:focus-within .media-thumb__action,
+.media-thumb__action:has( [aria-expanded='true'] ) {
 	opacity: 1;
 	pointer-events: auto;
 }
 
 @media ( hover: none ) {
-	.media-thumb__unpin.components-button.has-icon {
+	.media-thumb__action {
 		opacity: 1;
 		pointer-events: auto;
 	}

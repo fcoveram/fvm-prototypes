@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { SearchControl, Button } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
 import FilterMenu from './FilterMenu.jsx';
 import MediaGroup from './MediaGroup.jsx';
 
@@ -22,28 +21,30 @@ function matchesSearch( item, query ) {
 }
 
 /*
- * The body shared by every accordion section: a search row (SearchControl +
- * FilterMenu) above the content.
+ * The body shared by every accordion section: a fixed search row (SearchControl
+ * + FilterMenu) above a scrollable results region. The panel body fills the
+ * available height; only the results region scrolls.
  *
- *  - variant="grouped" (Pinned, Media Library): content is split into IMAGES and
- *    AUDIO groups; the filter shows both, or narrows to one.
- *  - variant="flat" (From the web): a single ungrouped grid showing the one
- *    selected type (images by default).
+ *  - variant="grouped" (Pinned, Media Library): split into IMAGES / AUDIO groups.
+ *  - variant="flat" (From the web): one ungrouped grid of the selected type.
  *
- * `onUnpin` (Pinned only) enables the hover/focus unpin button on each tile.
- * `onAddFromLibrary` (Pinned only) renders the "Add from Media Library" button.
+ * `onUnpin` (Pinned) enables the unpin button on each tile. `itemMenu` (Media
+ * Library / web) enables the per-image "more" menu. `onAddFromLibrary` (Pinned)
+ * renders the bottom "Add from Media Library" button.
  */
 export default function MediaBrowser( {
 	items,
 	variant,
+	defaultFilter,
 	onUnpin,
+	itemMenu,
 	onAddFromLibrary,
 	searchPlaceholder = 'Search',
 } ) {
 	const isFlat = variant === 'flat';
 	const choices = isFlat ? WEB_CHOICES : GROUPED_CHOICES;
 	const [ search, setSearch ] = useState( '' );
-	const [ filter, setFilter ] = useState( choices[ 0 ].value );
+	const [ filter, setFilter ] = useState( defaultFilter ?? choices[ 0 ].value );
 
 	const filtered = useMemo(
 		() => items.filter( ( item ) => matchesSearch( item, search ) ),
@@ -76,42 +77,48 @@ export default function MediaBrowser( {
 				/>
 			</div>
 
-			{ isFlat ? (
-				<MediaGroup items={ showImages ? images : audio } />
-			) : (
-				<>
-					{ showImages && (
-						<MediaGroup
-							label="Images"
-							items={ images }
-							onUnpin={ onUnpin }
-						/>
-					) }
-					{ showAudio && (
-						<MediaGroup
-							label="Audio"
-							items={ audio }
-							onUnpin={ onUnpin }
-						/>
-					) }
-				</>
-			) }
+			<div className="media-browser__results">
+				{ isFlat ? (
+					<MediaGroup
+						items={ showImages ? images : audio }
+						itemMenu={ itemMenu }
+					/>
+				) : (
+					<>
+						{ showImages && (
+							<MediaGroup
+								label="Images"
+								items={ images }
+								onUnpin={ onUnpin }
+								itemMenu={ itemMenu }
+							/>
+						) }
+						{ showAudio && (
+							<MediaGroup
+								label="Audio"
+								items={ audio }
+								onUnpin={ onUnpin }
+								itemMenu={ itemMenu }
+							/>
+						) }
+					</>
+				) }
 
-			{ ! hasResults && (
-				<p className="media-browser__empty">
-					{ search.trim()
-						? `No media matches “${ search.trim() }”.`
-						: onAddFromLibrary
-						? 'Nothing pinned yet. Pin media from the library to keep it handy here.'
-						: 'No media to show.' }
-				</p>
-			) }
+				{ ! hasResults && (
+					<p className="media-browser__empty">
+						{ search.trim()
+							? `No media matches “${ search.trim() }”.`
+							: onAddFromLibrary
+							? 'Nothing pinned yet. Pin media from the library to keep it handy here.'
+							: 'No media to show.' }
+					</p>
+				) }
+			</div>
 
 			{ onAddFromLibrary && (
 				<Button
 					className="media-browser__add"
 					variant="secondary"
-					icon={ plus }
 					onClick={ onAddFromLibrary }
 					__next40pxDefaultSize
 				>
