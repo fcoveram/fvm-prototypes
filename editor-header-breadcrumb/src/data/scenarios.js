@@ -1,5 +1,5 @@
 /**
- * Prototype scenarios — one per Figma design version.
+ * Prototype scenarios — one per design version.
  *
  * All three scenarios show the same editorial context (editing "My pattern"
  * inside a template), but explore three different ways to present the
@@ -25,7 +25,6 @@ export const scenarios = [
 	{
 		id: 'label-button',
 		label: 'A — Label + Button',
-		figmaNode: '17:4961',
 		description:
 			'The current document is shown as a single button: icon + label + chevron ▾ all together. The middle (parent) item uses a filled icon variant.',
 		variant: 'label-button',
@@ -47,7 +46,6 @@ export const scenarios = [
 	{
 		id: 'icon-button',
 		label: 'B — Breadcrumb + IconButton',
-		figmaNode: '17:4574',
 		description:
 			'The current document label and the chevron ▾ are split: the label is a standalone Button, and the dropdown trigger is a separate IconButton to the right of the breadcrumbs. The middle item uses an outline icon variant.',
 		variant: 'icon-button',
@@ -63,7 +61,6 @@ export const scenarios = [
 	{
 		id: 'button',
 		label: 'C — Button only',
-		figmaNode: '17:4432',
 		description:
 			'The current document is a plain Button with icon + label — no chevron. The dropdown concept is removed entirely. Middle item uses the filled icon variant.',
 		variant: 'button',

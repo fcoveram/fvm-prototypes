@@ -30,7 +30,7 @@
  * All items are DUMMY (they only log) — this prototype mirrors styles/behaviour
  * without wiring real document actions.
  *
- * Menu content (Figma 17:5158):
+ * Menu content:
  *   Rename · Duplicate · ─── · [category] All pages ·
  *   [template] Edit template: {name} · ─── · Send to trash
  *

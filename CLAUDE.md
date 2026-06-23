@@ -67,14 +67,18 @@ Run locally with `npm install && npm run dev`.
 
 ## Deploy (only after the user approves)
 Run these **only once the user has said yes** to deploying:
-1. Ensure `package-lock.json` is in sync (`npm install`) and `npm run build` is clean.
-2. Branch off `main` — never commit straight to `main`:
+1. Branch off `main` — never commit straight to `main`:
    `git -C ~/Code/Prototypes checkout -b <branch>`. Always scope git with
    `git -C ~/Code/Prototypes …`; `~` itself is an accidental empty git repo.
-3. Commit (end the message with the `Co-Authored-By` trailer), push, open a PR.
-4. Wait for the Vercel build check to pass, then merge to `main` (squash). The push to
+2. Ensure `package-lock.json` is in sync (`npm install`) and `npm run build` is clean.
+3. **If this is a new prototype going public for the first time**, add it to the root
+   `README.md` **Prototypes** list — one bullet,
+   `[<name>](https://prototypes.fvm.house/<name>/) — <one-line description>` — in the same
+   commit, so the repo landing page lists every live prototype.
+4. Commit (end the message with the `Co-Authored-By` trailer), push, open a PR.
+5. Wait for the Vercel build check to pass, then merge to `main` (squash). The push to
    `main` is what publishes — Vercel rebuilds the monorepo and redeploys.
-5. Verify live: `curl -sIL https://prototypes.fvm.house/<name>/` → `HTTP 200`; the page
+6. Verify live: `curl -sIL https://prototypes.fvm.house/<name>/` → `HTTP 200`; the page
    `<title>` and `./assets/*.js|css` return 200. (PR **preview** URLs are auth-gated and
    return 401 to anonymous requests — verify on the public production domain instead.)
 

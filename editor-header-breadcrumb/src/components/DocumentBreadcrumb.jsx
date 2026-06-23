@@ -1,11 +1,11 @@
 /**
  * DocumentBreadcrumb
  *
- * Three layout variants matching the Figma design versions (node 17:5388).
+ * Three layout variants exploring different ways to present the current document item.
  *
  * VARIANTS
  * ────────
- * 'label-button'  — Version A (Figma 24:651)
+ * 'label-button'  — Version A
  *   Parent items : IconButton (icon only, navigable)
  *   Current item : Static Icon + Text label grouped as one unit (icon and
  *                  label 4px / gap-xs apart; the document name is
@@ -13,13 +13,13 @@
  *                  chevron-down `IconButton` — the only interactive control.
  *                  Clicking the chevron opens the DocumentMenu.
  *
- * 'icon-button'   — Version B (Figma 17:4574)
+ * 'icon-button'   — Version B
  *   Parent items : IconButton (icon only, navigable)
  *   Current item : Button (icon + label text, Storybook: Button--with-icon)
  *                  + a separate chevron `IconButton`. Clicking the chevron
  *                  opens the DocumentMenu.
  *
- * 'button'        — Version C (Figma 17:4432)
+ * 'button'        — Version C
  *   Parent items : IconButton (icon only, navigable)
  *   Current item : Button (icon + label text) — no chevron. Clicking the
  *                  whole button opens the DocumentMenu.
