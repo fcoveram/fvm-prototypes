@@ -51,7 +51,7 @@ export default function MediaTab() {
 					variant="grouped"
 					defaultFilter="images"
 					onUnpin={ handleUnpin }
-					onAddFromLibrary={ () => setOpenSection( 'library' ) }
+					showAddButton
 					searchPlaceholder="Search pinned media"
 				/>
 			</PanelBody>

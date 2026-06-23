@@ -1,7 +1,6 @@
 import { Icon } from '@wordpress/components';
 import { IconButton } from '@wordpress/ui';
 import { closeSmall, audio as audioIcon } from '@wordpress/icons';
-import photo from '../assets/photo.jpg';
 import MediaItemMenu from './MediaItemMenu.jsx';
 
 /*
@@ -37,7 +36,7 @@ export default function MediaThumb( { item, onUnpin, menu } ) {
 			) : (
 				<img
 					className="media-thumb__image"
-					src={ photo }
+					src={ item.src }
 					alt={ item.name }
 					loading="lazy"
 					draggable="false"

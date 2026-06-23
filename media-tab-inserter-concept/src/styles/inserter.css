@@ -24,7 +24,7 @@
  * ------------------------------------------------------------------ */
 .inserter {
 	width: 350px;
-	height: 600px;
+	height: 800px;
 	display: flex;
 	flex-direction: column;
 	min-height: 0;
@@ -210,6 +210,25 @@
 	width: 100%;
 	justify-content: center;
 	text-align: center;
+}
+
+/* Native popover standing in for the modal media library (rendered in the top
+ * layer, so it isn't clipped by the inserter's overflow). */
+.media-browser__add-popover {
+	margin: auto;
+	max-width: 260px;
+	padding: 16px 20px;
+	border: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
+	border-radius: var( --wpds-border-radius-md, 8px );
+	box-shadow: 0 8px 32px rgba( 0, 0, 0, 0.16 );
+	font-size: 13px;
+	line-height: 1.5;
+	text-align: center;
+	color: var( --wpds-color-fg-content-neutral, #1e1e1e );
+}
+
+.media-browser__add-popover::backdrop {
+	background: rgba( 0, 0, 0, 0.2 );
 }
 
 /* ------------------------------------------------------------------ *

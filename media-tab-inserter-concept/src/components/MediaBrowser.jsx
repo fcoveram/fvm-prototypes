@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { SearchControl, Button } from '@wordpress/components';
 import FilterMenu from './FilterMenu.jsx';
 import MediaGroup from './MediaGroup.jsx';
@@ -29,8 +29,9 @@ function matchesSearch( item, query ) {
  *  - variant="flat" (From the web): one ungrouped grid of the selected type.
  *
  * `onUnpin` (Pinned) enables the unpin button on each tile. `itemMenu` (Media
- * Library / web) enables the per-image "more" menu. `onAddFromLibrary` (Pinned)
- * renders the bottom "Add from Media Library" button.
+ * Library / web) enables the per-image "more" menu. `showAddButton` (Pinned)
+ * renders the bottom "Add from Media Library" button, which opens a native
+ * popover standing in for the (not-built) modal media library.
  */
 export default function MediaBrowser( {
 	items,
@@ -38,13 +39,14 @@ export default function MediaBrowser( {
 	defaultFilter,
 	onUnpin,
 	itemMenu,
-	onAddFromLibrary,
+	showAddButton = false,
 	searchPlaceholder = 'Search',
 } ) {
 	const isFlat = variant === 'flat';
 	const choices = isFlat ? WEB_CHOICES : GROUPED_CHOICES;
 	const [ search, setSearch ] = useState( '' );
 	const [ filter, setFilter ] = useState( defaultFilter ?? choices[ 0 ].value );
+	const addPopoverRef = useRef( null );
 
 	const filtered = useMemo(
 		() => items.filter( ( item ) => matchesSearch( item, search ) ),
@@ -57,6 +59,20 @@ export default function MediaBrowser( {
 	const showAudio = isFlat ? filter === 'audio' : filter !== 'images';
 	const hasResults =
 		( showImages && images.length ) || ( showAudio && audio.length );
+
+	// Stand-in for opening the modal media library: a browser-native popover.
+	const handleAddClick = () => {
+		const el = addPopoverRef.current;
+		try {
+			if ( el && typeof el.togglePopover === 'function' ) {
+				el.togglePopover();
+				return;
+			}
+		} catch ( error ) {
+			// Older browsers without the Popover API — fall back to an alert.
+		}
+		window.alert( 'Media Library in modal shows up here' );
+	};
 
 	return (
 		<div className="media-browser">
@@ -108,22 +124,33 @@ export default function MediaBrowser( {
 					<p className="media-browser__empty">
 						{ search.trim()
 							? `No media matches “${ search.trim() }”.`
-							: onAddFromLibrary
+							: showAddButton
 							? 'Nothing pinned yet. Pin media from the library to keep it handy here.'
 							: 'No media to show.' }
 					</p>
 				) }
 			</div>
 
-			{ onAddFromLibrary && (
-				<Button
-					className="media-browser__add"
-					variant="secondary"
-					onClick={ onAddFromLibrary }
-					__next40pxDefaultSize
-				>
-					Add from Media Library
-				</Button>
+			{ showAddButton && (
+				<>
+					<Button
+						className="media-browser__add"
+						variant="secondary"
+						onClick={ handleAddClick }
+						aria-haspopup="dialog"
+						__next40pxDefaultSize
+					>
+						Add from Media Library
+					</Button>
+					<div
+						ref={ addPopoverRef }
+						className="media-browser__add-popover"
+						popover="auto"
+						role="status"
+					>
+						Media Library in modal shows up here
+					</div>
+				</>
 			) }
 		</div>
 	);
