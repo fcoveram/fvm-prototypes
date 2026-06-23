@@ -16,7 +16,7 @@ the open panel's content scrolls.
 
 - **Pinned** — media pinned to the document, grouped into **Images** and **Audio** (open and
   filtered to images by default). Hover/focus a tile for an **unpin** button; an "Add from
-  Media Library" button jumps to the library.
+  Media Library" button opens a popover standing in for the (not-built) modal library.
 - **Media Library** — the same grouped layout over the whole library. Each image has a
   **more menu** (⋮) with **"Pin image"**, which adds it to Pinned while keeping it in the
   library.
@@ -39,6 +39,7 @@ A standalone Vite + React app built from the WordPress Design System — no cust
 - **`@wordpress/icons`** — `settings` (the sliders filter glyph), `closeSmall`, `moreVertical`,
   `close`, `audio`.
 - **`@wordpress/theme`** design tokens (`--wpds-*`) for color and spacing.
-- Images all render one bundled sample photo (cropped square); audio uses tinted icon tiles.
+- Each panel's images render their own bundled sample photo (cropped square); audio uses
+  tinted icon tiles.
 
 Run locally with `npm install && npm run dev`.

@@ -2,14 +2,18 @@
  * Deterministic mock media for the prototype — no network, no real media
  * library, no Openverse. Each item is:
  *
- *   image → { id, type: 'image', name }
+ *   image → { id, type: 'image', name, src }
  *   audio → { id, type: 'audio', name, hue }
  *
- * Every image renders the same bundled sample photo (see MediaThumb); `name`
- * drives search + alt text, and the audio `hue` tints its placeholder tile.
- * Media Library and From the web carry ~3× the images so their panels overflow
- * and scroll.
+ * Each panel's images render their own bundled sample photo (so an item keeps
+ * its image when moved between panels); `name` drives search + alt text, and the
+ * audio `hue` tints its placeholder tile. Media Library and From the web carry
+ * ~3× the images so their panels overflow and scroll.
  */
+
+import pinnedPhoto from '../assets/pinned.jpg';
+import libraryPhoto from '../assets/library.jpg';
+import webPhoto from '../assets/web.jpg';
 
 const GOLDEN_ANGLE = 137.508;
 
@@ -31,7 +35,7 @@ const IMAGE_NAMES = [
 	'Night skyline',
 ];
 
-function makeImages( prefix, count ) {
+function makeImages( prefix, count, src ) {
 	return Array.from( { length: count }, ( _, i ) => {
 		const base = IMAGE_NAMES[ i % IMAGE_NAMES.length ];
 		const wrap = Math.floor( i / IMAGE_NAMES.length );
@@ -39,6 +43,7 @@ function makeImages( prefix, count ) {
 			id: `${ prefix }-img-${ i }`,
 			type: 'image',
 			name: wrap ? `${ base } ${ wrap + 1 }` : base,
+			src,
 		};
 	} );
 }
@@ -54,7 +59,7 @@ function makeAudio( prefix, names, hueSeed ) {
 
 // --- Pinned: a small, curated set (8 images + 6 audio).
 export const pinned = [
-	...makeImages( 'pinned', 8 ),
+	...makeImages( 'pinned', 8, pinnedPhoto ),
 	...makeAudio(
 		'pinned',
 		[
@@ -71,7 +76,7 @@ export const pinned = [
 
 // --- Media Library: the whole library — many images (overflows) + audio.
 export const library = [
-	...makeImages( 'library', 36 ),
+	...makeImages( 'library', 36, libraryPhoto ),
 	...makeAudio(
 		'library',
 		[
@@ -92,7 +97,7 @@ export const library = [
 // --- From the web (Openverse-flavored, mock). Many images (overflows) + audio;
 // shown one type at a time, images by default.
 export const web = [
-	...makeImages( 'web', 45 ),
+	...makeImages( 'web', 45, webPhoto ),
 	...makeAudio(
 		'web',
 		[
