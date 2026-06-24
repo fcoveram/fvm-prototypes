@@ -1,0 +1,40 @@
+:root {
+	color-scheme: light;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	background: #fcfcfc;
+	color: #1e1e1e;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans,
+		Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+	font-size: 13px;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* The stage centers the prototype; the inner column is left-aligned so the controls
+   bar sits above the grid's left edge (matching the design reference). */
+.stage {
+	min-height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 48px;
+}
+
+.stage__inner {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 20px;
+}
