@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig( {
 	// Relative asset paths so the SAME build works both at the Vercel root and
-	// under a subpath (e.g. prototypes.fvm.house/media-tab-inserter-concept/).
+	// under a subpath (e.g. prototypes.fvm.house/media-tab-inserter/).
 	// Safe here: the prototype has no client-side routing.
 	base: './',
 	plugins: [ react() ],

@@ -5,7 +5,7 @@ redesigned **Media** tab that organizes media into three collapsible panels: **P
 **Media Library**, and **From the web** (Openverse). It proposes the interaction model; it
 doesn't implement real media, search, or block insertion.
 
-**Live demo:** https://prototypes.fvm.house/media-tab-inserter-concept/
+**Live demo:** https://prototypes.fvm.house/media-tab-inserter/
 
 ## What it explores
 
