@@ -16,6 +16,31 @@ These three principles define every prototype here — hold to them when creatin
    mostly the **WordPress Design System** — build the UI from `@wordpress/components` and its
    design tokens, and **avoid custom UI styling** or bespoke components where a WordPress one
    exists.
+
+   > **CRITICAL — the `wordpress-design-system` MCP is your entry point to the Design System.**
+   > Any time this work touches the WordPress Design System or the components that live in it,
+   > you **must** go through the `wordpress-design-system` MCP first. It is the single
+   > authoritative source for understanding the Design System and how to use it correctly:
+   > `get_components` to map a request to canonical component names, `get_component_details`
+   > for props/usage, and `get_design_tokens` for the `--wpds-*` tokens. **Never rely on
+   > memory or guesswork** about which components or tokens exist — query the MCP and treat its
+   > output as the source of truth. Skipping this step means the prototype will not read as
+   > real WordPress, so it is not optional.
+
+   **The `wordpress-design-system` MCP vs. the `wpds` skill — don't conflate them.** They
+   answer *different* questions and are both used, so they never contradict:
+   - **`wordpress-design-system` MCP = the data source (the "what").** It returns authoritative
+     facts about what actually exists in the Design System — canonical component names, props,
+     usage notes, and `--wpds-*` tokens — via `get_components`, `get_component_details`, and
+     `get_design_tokens`. It holds no opinion about how you build; it just returns ground truth.
+   - **`wpds` skill = the working method (the "how").** It governs *how* to build WPDS UI —
+     when to engage, the rules (use the MCP for docs, don't web-search for WPDS facts, read
+     reference docs first), the default stack, boundaries, and expected output. It does **not**
+     contain the component/token data itself; its own first rule is to call into the MCP for it.
+   - **Precedence, so they never conflict:** for *what exists and its exact API*, the MCP is the
+     single source of truth. For *how to build and behave*, follow the `wpds` skill. Never treat
+     the skill as a substitute for querying the MCP, and never treat the MCP as a substitute for
+     the skill's build rules — you use the skill's method **and** the MCP's facts together.
 3. **These are ideas to discuss, not shippable code.** A prototype is **not meant to be
    implemented into WordPress as-is.** It exists to make a product/UX idea tangible so it can
    be discussed and iterated on with contributors. Optimize for communicating the idea, not
@@ -57,7 +82,10 @@ treat *pushing* as *publishing*.
    build's `npm ci` fails with `EUSAGE`.
 5. Build the UI from the **WordPress Design System** (`@wordpress/components` + design
    tokens), reusing real WordPress components rather than styling your own (see *What these
-   prototypes are for*).
+   prototypes are for*). **Before you pick components or tokens, query the
+   `wordpress-design-system` MCP** — it is the crucial, non-negotiable entry point for knowing
+   what the Design System actually offers (see the callout under *What these prototypes are
+   for*).
 6. Add a **`WPDS-COMPONENTS.md`** to the prototype folder documenting which WordPress Design
    System components it references (see *WPDS component reference doc*). **New prototypes only** —
    this is required for every prototype you create from now on.
@@ -101,6 +129,11 @@ Build the list from what actually grounds the prototype:
 - **The user's instructions** — the components/patterns they name or ask for.
 - **Any Figma designs provided** — inspect the design and map each element to the WordPress
   Design System component it corresponds to.
+- **The `wordpress-design-system` MCP** — this is the crucial step for getting the mapping
+  right. Run `get_components` / `get_component_details` through the MCP to resolve every
+  generic name (button, dropdown, card) to its canonical WPDS component and confirm the
+  package and props before you record it here. Do not document a component you have not
+  verified against the MCP.
 
 For each referenced component, capture:
 - **Component name** — e.g. `Button`, `ToolbarButton`, `Popover`, `Card`, `SlotFill`.
