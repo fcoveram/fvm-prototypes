@@ -5,6 +5,22 @@ This folder (`~/Code/Prototypes/`) **is a monorepo**: one Git repo
 **`https://prototypes.fvm.house/<name>/`**. Each prototype is a self-contained
 Vite + React app in its own subfolder.
 
+## What these prototypes are for (read before building)
+These three principles define every prototype here — hold to them when creating a new one:
+
+1. **Purpose: experiment with or improve WordPress.** Every prototype explores an idea for
+   **WordPress itself — either Core WordPress or Gutenberg.** If it isn't about improving one
+   of those, it doesn't belong here.
+2. **Build with the WordPress system, not around it.** Reuse as much of the real WordPress
+   platform as possible so the prototype looks and behaves like WordPress. In practice that is
+   mostly the **WordPress Design System** — build the UI from `@wordpress/components` and its
+   design tokens, and **avoid custom UI styling** or bespoke components where a WordPress one
+   exists.
+3. **These are ideas to discuss, not shippable code.** A prototype is **not meant to be
+   implemented into WordPress as-is.** It exists to make a product/UX idea tangible so it can
+   be discussed and iterated on with contributors. Optimize for communicating the idea, not
+   for production-readiness.
+
 ## Working on a prototype — local-first (read this first)
 **Default to local-only. Never deploy without the user's explicit request.** Vercel
 auto-deploys on every push to `main`, so any commit pushed to the repo is a public deploy —
@@ -39,15 +55,23 @@ treat *pushing* as *publishing*.
    declare React 19 peers; prototypes pin React 18, so `npm ci` fails without it).
 4. Ensure its `package-lock.json` is in sync (`npm install`), or the Vercel
    build's `npm ci` fails with `EUSAGE`.
-5. Keep iterating locally. `build.sh` auto-discovers any top-level folder with a
+5. Build the UI from the **WordPress Design System** (`@wordpress/components` + design
+   tokens), reusing real WordPress components rather than styling your own (see *What these
+   prototypes are for*).
+6. Add a **`WPDS-COMPONENTS.md`** to the prototype folder documenting which WordPress Design
+   System components it references (see *WPDS component reference doc*). **New prototypes only** —
+   this is required for every prototype you create from now on.
+7. Keep iterating locally. `build.sh` auto-discovers any top-level folder with a
    `package.json` + a `vite.config.*`. It goes live at `prototypes.fvm.house/<name>/` only
    once the user approves a deploy (see *Deploy*) and a push to `main` triggers the build.
 
 ## Keep each prototype minimal
-Just the app — **no design notes, no Figma links, no implementation write-ups**.
+Just the app — **no scattered design notes, no loose Figma links, no implementation
+write-ups**. The one intentional exception is the `WPDS-COMPONENTS.md` reference doc
+(see below), which is required for new prototypes.
 A prototype folder is typically: `src/`, `index.html`, `package.json`,
-`package-lock.json`, `vite.config.js`, `.npmrc`, and a short `README.md` in this
-shape:
+`package-lock.json`, `vite.config.js`, `.npmrc`, `WPDS-COMPONENTS.md` (new prototypes),
+and a short `README.md` in this shape:
 
 ```markdown
 # <Prototype Title>
@@ -65,6 +89,40 @@ WordPress Design System — no custom UI styling.">
 - ...a few brief bullets, only as needed
 
 Run locally with `npm install && npm run dev`.
+```
+
+## WPDS component reference doc (`WPDS-COMPONENTS.md`)
+Every **new** prototype must include a `WPDS-COMPONENTS.md` in its folder. Its job is to help
+a developer understand **which WordPress Design System components the prototype references** —
+so they can trace the prototype back to real WordPress building blocks. (This is separate from
+the user-facing `README.md`; the README stays a short overview, this doc is the component map.)
+
+Build the list from what actually grounds the prototype:
+- **The user's instructions** — the components/patterns they name or ask for.
+- **Any Figma designs provided** — inspect the design and map each element to the WordPress
+  Design System component it corresponds to.
+
+For each referenced component, capture:
+- **Component name** — e.g. `Button`, `ToolbarButton`, `Popover`, `Card`, `SlotFill`.
+- **The `@wordpress/*` package** it comes from (usually `@wordpress/components`).
+- **How it's used in this prototype** — one line on the role it plays.
+- **Source** — whether it came from the user's instructions or a specific Figma node/design.
+
+Suggested shape:
+
+```markdown
+# WPDS components referenced — <Prototype Title>
+
+Which WordPress Design System components this prototype is built from, and why.
+Source: <the user's brief / Figma file link or node>.
+
+| Component | Package | Used for | Source |
+| --- | --- | --- | --- |
+| `Button` | `@wordpress/components` | Primary action in the header | Figma: "Header / CTA" |
+| `Popover` | `@wordpress/components` | Anchored menu on the breadcrumb | User brief |
+
+## Notes
+- <Anything a component doesn't cover: gaps, custom bits, or where WPDS fell short.>
 ```
 
 ## Deploy (only when the user asks to go public)
