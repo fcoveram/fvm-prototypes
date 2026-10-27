@@ -1,0 +1,33 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "New left sidebar",
+    "description": "Demo site with the New left sidebar plugin: a Site Editor-inspired navigation for wp-admin.",
+    "author": "fcoveram"
+  },
+  "landingPage": "/wp-admin/",
+  "preferredVersions": {
+    "wp": "latest",
+    "php": "8.3"
+  },
+  "features": {
+    "networking": true
+  },
+  "login": true,
+  "steps": [
+    {
+      "step": "activateTheme",
+      "themeFolderName": "twentytwentyfive"
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "url",
+        "url": "__PLUGIN_ZIP_URL__"
+      },
+      "options": {
+        "activate": true
+      }
+    }
+  ]
+}

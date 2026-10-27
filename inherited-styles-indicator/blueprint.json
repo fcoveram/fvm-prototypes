@@ -1,0 +1,37 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "Inherited styles indicator",
+    "description": "WordCamp Galicia demo site with the Inherited styles indicator plugin: diamonds show where each block style comes from.",
+    "author": "fcoveram"
+  },
+  "landingPage": "/wp-admin/post.php?post=44&action=edit",
+  "preferredVersions": {
+    "wp": "latest",
+    "php": "8.3"
+  },
+  "features": {
+    "networking": true
+  },
+  "login": true,
+  "steps": [
+    {
+      "step": "activateTheme",
+      "themeFolderName": "twentytwentyfive"
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "url",
+        "url": "__PLUGIN_ZIP_URL__"
+      },
+      "options": {
+        "activate": true
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "__SEED_PHP__"
+    }
+  ]
+}

@@ -71,8 +71,26 @@ treat *pushing* as *publishing*.
 - **Auto-deploys on push to `main`** (so pushing = publishing — only push once the user
   approves; see *Working on a prototype*); pull requests get Vercel preview URLs.
 - No deploy workflow, no SSH keys, no rsync — Vercel handles deployment.
+- **Vercel is the only host.** Every prototype — including the WordPress Playground ones —
+  is served from this one project. Do **not** add GitHub Pages, a second Vercel project, or
+  a per-prototype `.vercel.app` URL; that split is what this setup replaced.
+- `prototypes.fvm.house/` (the bare root) **redirects to `fvm.house/prototypes/`** via a
+  307 in `vercel.json`. That WordPress page is the index of everything; the monorepo has no
+  landing page of its own.
 
-## Add a new prototype
+## Two kinds of prototype
+`build.sh` auto-discovers any top-level folder and picks the kind from what's inside it:
+
+| Kind | Folder holds | What `build.sh` does |
+| --- | --- | --- |
+| **app** | `package.json` + `vite.config.*` | `npm ci && npm run build`, copies `dist/` |
+| **playground** | `blueprint.json` | zips `plugin/` → `plugin.zip`, inlines `seed.php`, renders the launch page |
+
+Pick **app** for a UI idea that can be faked in React — that's the default, and most
+prototypes are this. Pick **playground** when the idea only reads true running inside real
+WordPress (it hooks the editor, filters admin UI, needs real data).
+
+### Add an app prototype
 1. Create `~/Code/Prototypes/<name>/` containing a self-contained Vite + React app.
 2. Set **`base: './'`** in its `vite.config.js` (relative asset paths so it works
    under the `/<name>/` subpath).
@@ -89,17 +107,37 @@ treat *pushing* as *publishing*.
 6. Add a **`WPDS-COMPONENTS.md`** to the prototype folder documenting which WordPress Design
    System components it references (see *WPDS component reference doc*). **New prototypes only** —
    this is required for every prototype you create from now on.
-7. Keep iterating locally. `build.sh` auto-discovers any top-level folder with a
-   `package.json` + a `vite.config.*`. It goes live at `prototypes.fvm.house/<name>/` only
-   once the user approves a deploy (see *Deploy*) and a push to `main` triggers the build.
+7. Keep iterating locally. It goes live at `prototypes.fvm.house/<name>/` only once the user
+   approves a deploy (see *Deploy*) and a push to `main` triggers the build.
+
+### Add a playground prototype
+1. Create `~/Code/Prototypes/<name>/` with the plugin source in **`plugin/`** — real,
+   editable files, exactly as they'd sit in `wp-content/plugins/<name>/`.
+2. Add a **`blueprint.json`** ([schema](https://playground.wordpress.net/blueprint-schema.json))
+   with a `meta` block (`title`, `description` — these feed the launch page) and the two
+   placeholders `build.sh` fills in:
+   - `"url": "__PLUGIN_ZIP_URL__"` in the `installPlugin` step → the built zip's absolute URL.
+   - `"code": "__SEED_PHP__"` in a `runPHP` step → the contents of **`seed.php`**, if the
+     prototype needs demo content. Keep that PHP in `seed.php`, never pasted into the JSON.
+3. Optionally add an **`index.html`** launch page. Without one, the shared
+   `playground-template.html` is used, filled from the blueprint's `meta`. Either way,
+   `{{TITLE}}`, `{{DESCRIPTION}}` and `{{BLUEPRINT_URL}}` are substituted at build time —
+   **never hardcode a blueprint URL in the page.**
+4. No `package.json`, no `.npmrc`, no `WPDS-COMPONENTS.md` — this kind is real WordPress,
+   so it's already using real components.
+5. Check it locally with `BASE_URL="http://localhost:8099" ./build.sh`, then serve `dist/`.
+   Note that **Playground itself can't load a localhost blueprint** — the round trip only
+   works once it's on the public domain, so verify that right after deploying.
 
 ## Keep each prototype minimal
 Just the app — **no scattered design notes, no loose Figma links, no implementation
 write-ups**. The one intentional exception is the `WPDS-COMPONENTS.md` reference doc
 (see below), which is required for new prototypes.
-A prototype folder is typically: `src/`, `index.html`, `package.json`,
-`package-lock.json`, `vite.config.js`, `.npmrc`, `WPDS-COMPONENTS.md` (new prototypes),
-and a short `README.md` in this shape:
+An **app** folder is typically: `src/`, `index.html`, `package.json`,
+`package-lock.json`, `vite.config.js`, `.npmrc`, `WPDS-COMPONENTS.md` (new prototypes).
+A **playground** folder is typically just: `plugin/`, `blueprint.json`, and optionally
+`seed.php` and `index.html`.
+Both get a short `README.md` in this shape:
 
 ```markdown
 # <Prototype Title>
@@ -194,11 +232,23 @@ is fine — it's not a link.)
   Already in place; new prototypes are just paths under it and need no DNS changes.
 
 ## Gotchas
-- Every prototype needs `base: './'`, an in-sync `package-lock.json`, and the
+- Every **app** prototype needs `base: './'`, an in-sync `package-lock.json`, and the
   `.npmrc` `legacy-peer-deps=true`.
 - Caching is automatic on Vercel — hashed JS/CSS are immutable and each deploy
   serves a fresh `index.html`; **no manual cache purge** needed.
 - An earlier approach copied builds onto Pressable (`/htdocs/prototype/…`); it is
   **fully retired** — do not store prototype files on Pressable.
-- `prototypes.fvm.house/` (root, no `<name>`) has no landing page yet — intentionally
-  blank for now.
+- **Playground needs absolute, CORS-reachable URLs.** It fetches the blueprint and the
+  plugin zip from `playground.wordpress.net`, so relative paths can't work. Vercel already
+  sends `access-control-allow-origin: *`, so nothing extra is needed — but this is why
+  `build.sh` substitutes `BASE_URL` instead of letting pages link relatively.
+- **`seed.php` is demo content, not plugin code.** It runs once after install, via
+  `runPHP`. Keep plugin behaviour in `plugin/`; keep posts, options and theme setup in
+  `seed.php`. It can get large (the indicator's is ~340 KB) — that's fine, it's a real file
+  rather than an escaped string in JSON.
+- **`build.sh` must stay executable.** Editing it with a tool that rewrites the file can
+  drop the exec bit; `chmod +x build.sh && git update-index --chmod=+x build.sh` restores it,
+  and the Vercel build fails without it.
+- `inherited-styles-inspector` and `inherited-styles-indicator` are **two different
+  prototypes**, not a duplicate: the inspector is an app mocking a style-origins *menu*, the
+  indicator is a playground plugin marking *each control inline* with a diamond.
