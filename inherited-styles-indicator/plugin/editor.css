@@ -1,0 +1,58 @@
+/**
+ * Inherited styles indicator.
+ */
+
+/* Core's experimental inheritance UI: keep the labels plain... */
+.block-editor-block-inspector .is-inherited-from-global-styles .components-base-control__label,
+.block-editor-block-inspector .is-inherited-from-global-styles .components-input-control__label {
+	text-decoration: none;
+}
+.block-editor-block-inspector .is-inherited-from-global-styles .block-editor-panel-color-gradient-settings__color-name,
+.block-editor-block-inspector .is-inherited-from-global-styles .block-editor-global-styles-background-panel__inspector-media-replace-title,
+.block-editor-block-inspector .is-inherited-from-global-styles .block-editor-panel-duotone-settings__label {
+	border-bottom: 0;
+}
+
+/* ...and drop its inline dot + reset button next to labels. Reset lives in the ⋮ menu. */
+.block-editor-block-inspector .global-styles-inheritance-affordance {
+	display: none !important;
+}
+
+/* Color rows: turn core's dot back into the regular hover "clear" button. */
+.block-editor-block-inspector .has-local-override-from-global-styles__reset.block-editor-panel-color-gradient-settings__reset {
+	width: 24px !important;
+	min-width: 24px !important;
+	height: 24px !important;
+	inset-inline-end: 0;
+	margin-inline-end: 8px;
+	border-radius: 2px !important;
+	opacity: 0;
+}
+.block-editor-block-inspector .block-editor-panel-color-gradient-settings__dropdown:hover + .has-local-override-from-global-styles__reset,
+.block-editor-block-inspector .has-local-override-from-global-styles__reset.block-editor-panel-color-gradient-settings__reset:is(:hover, :focus) {
+	opacity: 1;
+}
+.block-editor-block-inspector .has-local-override-from-global-styles__dot {
+	display: none !important;
+}
+.block-editor-block-inspector .block-editor-panel-color-gradient-settings__reset .has-local-override-from-global-styles__reset-icon {
+	display: block;
+	color: var(--wp-components-color-foreground, #1e1e1e);
+}
+
+/* The diamond (Figma "diamond-13-sb"): 16×16 icon, 4px after the label. */
+.inherited-styles-has-diamond {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 4px;
+	white-space: nowrap;
+}
+.inherited-styles-diamond,
+.inherited-styles-diamond__icon {
+	display: inline-flex;
+	flex: none;
+}
+.inherited-styles-diamond svg {
+	display: block;
+	fill: none;
+}

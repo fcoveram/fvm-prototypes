@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estilos heredados</title>
+<meta name="description" content="Crea un sitio WordPress en tu navegador para probar el plugin Estilos heredados.">
+<style>
+	/* WordPress Design System tokens (values from WordPress 7.1). */
+	:root {
+		--wpds-color-background-surface-neutral-weak: #f4f4f4;
+		--wpds-color-background-surface-neutral-strong: #fff;
+		--wpds-color-stroke-surface-neutral-weak: #f0f0f0;
+		--wpds-color-foreground-content-neutral: #1e1e1e;
+		--wpds-color-foreground-content-neutral-weak: #707070;
+		--wpds-color-background-interactive-brand-strong: #3858e9;
+		--wpds-color-background-interactive-brand-strong-active: #2e49d9;
+		--wpds-color-foreground-interactive-brand-strong: #eff0f2;
+		--wpds-color-stroke-focus: #3858e9;
+		--wpds-border-radius-sm: 2px;
+		--wpds-border-radius-lg: 8px;
+		--wpds-border-width-focus: 2px;
+		--wpds-dimension-size-lg: 40px;
+		--wpds-dimension-padding-lg: 16px;
+		--wpds-dimension-padding-2xl: 24px;
+		--wpds-typography-font-family-body: -apple-system, system-ui, "Segoe UI", "Roboto", "Oxygen-Sans", "Ubuntu", "Cantarell", "Helvetica Neue", sans-serif;
+		--wpds-typography-font-size-lg: 15px;
+		--wpds-typography-font-weight-emphasis: 600;
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--wpds-color-background-surface-neutral-weak);
+		color: var(--wpds-color-foreground-content-neutral);
+		font-family: var(--wpds-typography-font-family-body);
+		font-size: var(--wpds-typography-font-size-lg);
+		line-height: 1.5;
+	}
+	main {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		max-width: 580px;
+		min-height: 100vh;
+		min-height: 100dvh;
+		margin: 0 auto;
+		padding: 16px;
+	}
+	.card {
+		background: var(--wpds-color-background-surface-neutral-strong);
+		border: 1px solid var(--wpds-color-stroke-surface-neutral-weak);
+		border-radius: var(--wpds-border-radius-lg);
+		padding: 48px;
+	}
+	h1 {
+		margin: 0 0 var(--wpds-dimension-padding-lg);
+		font-size: 24px;
+		font-weight: var(--wpds-typography-font-weight-emphasis);
+		line-height: 1.2;
+	}
+	p { margin: 0; }
+	.button {
+		display: inline-flex;
+		align-items: center;
+		height: var(--wpds-dimension-size-lg);
+		margin: var(--wpds-dimension-padding-2xl) 0 12px;
+		padding: 0 var(--wpds-dimension-padding-lg);
+		border-radius: var(--wpds-border-radius-sm);
+		background: var(--wpds-color-background-interactive-brand-strong);
+		color: var(--wpds-color-foreground-interactive-brand-strong);
+		font-size: var(--wpds-typography-font-size-lg);
+		font-weight: var(--wpds-typography-font-weight-emphasis);
+		text-decoration: none;
+	}
+	.button:hover,
+	.button:active {
+		background: var(--wpds-color-background-interactive-brand-strong-active);
+	}
+	.button:focus-visible {
+		outline: var(--wpds-border-width-focus) solid var(--wpds-color-stroke-focus);
+		outline-offset: 2px;
+	}
+	.hint {
+		color: var(--wpds-color-foreground-content-neutral-weak);
+	}
+</style>
+</head>
+<body>
+<main>
+	<div class="card">
+		<h1>Estilos heredados</h1>
+		<p>Un plugin que muestra de dónde viene cada estilo de un bloque en el editor de WordPress: de los Estilos del sitio, de los estilos del tipo de bloque o del bloque padre.</p>
+		<a class="button" href="https://playground.wordpress.net/?blueprint-url={{BLUEPRINT_URL}}">Crear sitio WordPress</a>
+		<p class="hint">Se abre en WordPress Playground. No tienes que instalar nada.</p>
+	</div>
+</main>
+</body>
+</html>

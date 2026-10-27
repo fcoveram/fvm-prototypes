@@ -1,0 +1,478 @@
+/* ==========================================================================
+   New Left Sidebar — Site-Editor-style admin layout
+   ========================================================================== */
+
+/* ==========================================================================
+   1. GLOBAL LAYOUT — dark background, flex row
+   ========================================================================== */
+
+html,
+body {
+	height: 100%;
+}
+
+/* Full-page dark background */
+#wpwrap {
+	background: #1e1e1e;
+	display: flex;
+	flex-direction: row;
+	min-height: 100vh;
+	height: 100%;
+}
+
+/* ==========================================================================
+   2. SIDEBAR — 300px, dark, scrollable
+   ========================================================================== */
+
+#adminmenumain {
+	width: 300px;
+	flex-shrink: 0;
+	height: 100vh;
+	position: sticky;
+	top: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-gutter: stable;
+	scrollbar-color: transparent transparent;
+	scrollbar-width: thin;
+}
+
+#adminmenumain:hover {
+	scrollbar-color: #757575 transparent;
+}
+
+#adminmenumain::-webkit-scrollbar {
+	width: 12px;
+}
+
+#adminmenumain::-webkit-scrollbar-thumb {
+	background-color: transparent;
+	border: 3px solid transparent;
+	border-radius: 8px;
+	background-clip: padding-box;
+}
+
+#adminmenumain:hover::-webkit-scrollbar-thumb {
+	background-color: #757575;
+}
+
+#adminmenuback {
+	display: none;
+}
+
+#adminmenuwrap {
+	position: static;
+	float: none;
+	width: 100%;
+}
+
+#adminmenuwrap,
+#adminmenu,
+#adminmenu .wp-submenu {
+	width: 100%;
+	background: #1e1e1e;
+}
+
+#adminmenu {
+	margin: 0;
+	padding: 12px 0;
+}
+
+/* ==========================================================================
+   3. CONTENT AREA — white rounded card
+   ========================================================================== */
+
+#wpcontent {
+	flex-grow: 1;
+	min-width: 0;
+	margin-left: 0 !important;
+	padding: 16px 16px 16px 0;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+}
+
+#wpbody {
+	flex-grow: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+#wpbody-content {
+	flex-grow: 1;
+	float: none;
+	width: auto;
+	min-width: 0;
+	box-sizing: border-box;
+	background: #fff;
+	border-radius: 8px;
+	padding: 24px;
+	padding-bottom: 24px !important;
+	box-shadow:
+		0 1px 1px rgba(0, 0, 0, 0.03),
+		0 1px 2px rgba(0, 0, 0, 0.02),
+		0 3px 3px rgba(0, 0, 0, 0.02),
+		0 4px 4px rgba(0, 0, 0, 0.01);
+	overflow: auto;
+}
+
+#wpfooter {
+	display: none;
+}
+
+/* Screen-meta (screen options, help) */
+#screen-meta,
+#screen-meta-links {
+	margin-right: 16px;
+}
+
+/* ==========================================================================
+   4. MENU ITEMS — exact site editor navigation item style
+   ========================================================================== */
+
+/* Reset WP defaults on the <li> */
+#adminmenu li.menu-top {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+/* The clickable anchor — mirrors .edit-site-sidebar-navigation-item.components-item */
+#adminmenu a.menu-top,
+#adminmenu li.menu-top > a {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	box-sizing: border-box;
+	color: #949494 !important;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 20px;
+	padding: 8px 6px 8px 16px !important;
+	min-height: 40px;
+	border: none;
+	border-radius: 0;
+	background: transparent !important;
+	box-shadow: none !important;
+	text-decoration: none;
+	cursor: pointer;
+	transition: none;
+}
+
+/* Hover / focus — color only, no background highlight */
+#adminmenu li.menu-top:hover > a,
+#adminmenu a.menu-top:hover,
+#adminmenu a.menu-top:focus,
+#adminmenu li.menu-top > a:focus,
+.js #adminmenu li.menu-top.opensub > a {
+	color: #e0e0e0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+/* Active / current item — full-width dark fill */
+#adminmenu li.wp-has-current-submenu > a.wp-has-current-submenu,
+#adminmenu li.current > a.menu-top,
+#adminmenu li.wp-has-current-submenu > a.wp-has-current-submenu:hover,
+#adminmenu li.current > a.menu-top:hover {
+	background: #2f2f2f !important;
+	color: #fff !important;
+	font-weight: 500;
+	box-shadow: none !important;
+}
+
+/* Icons — 24×24 flex container, 20px glyph */
+#adminmenu div.wp-menu-image {
+	float: none;
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	margin-right: 8px;
+	margin-left: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+
+#adminmenu div.wp-menu-image::before {
+	float: none;
+	width: auto;
+	height: auto;
+	font-size: 20px;
+	line-height: 1;
+	color: inherit;
+	vertical-align: middle;
+}
+
+#adminmenu div.wp-menu-image img {
+	padding: 0;
+	width: 20px;
+	height: 20px;
+	display: block;
+}
+
+/* SVG data-URI icons: WordPress renders them as background-image on .wp-menu-image.svg */
+#adminmenu div.wp-menu-image.svg {
+	background-size: 20px 20px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/* Hide dashicons ::before pseudo-element on SVG items so it doesn't overlap the background-image */
+#adminmenu div.wp-menu-image.svg::before {
+	display: none !important;
+}
+
+/* Hover / focus — make SVG icons white */
+#adminmenu li.menu-top:hover > a .wp-menu-image.svg,
+#adminmenu li.menu-top > a:focus .wp-menu-image.svg,
+.js #adminmenu li.menu-top.opensub > a .wp-menu-image.svg {
+	filter: brightness(0) invert(1);
+}
+
+/* Active / current — make SVG icons white */
+#adminmenu li.wp-has-current-submenu > a.wp-has-current-submenu .wp-menu-image.svg,
+#adminmenu li.current > a.menu-top .wp-menu-image.svg {
+	filter: brightness(0) invert(1);
+}
+
+/* Menu label */
+#adminmenu div.wp-menu-name {
+	padding: 0;
+	font-size: 13px;
+	line-height: 20px;
+}
+
+/* Remove WP's collapse arrow */
+#adminmenu .wp-menu-arrow,
+#adminmenu li.wp-has-current-submenu .wp-menu-arrow {
+	display: none !important;
+}
+
+/* ==========================================================================
+   5. SUBMENU — inline expanded, no flyout popovers
+   ========================================================================== */
+
+/* Suppress flyout on non-current items */
+#adminmenu .wp-not-current-submenu .wp-submenu,
+.js #adminmenu .opensub .wp-not-current-submenu .wp-submenu,
+#adminmenu .wp-not-current-submenu a.menu-top:focus + .wp-submenu,
+.no-js #adminmenu .wp-not-current-submenu:hover .wp-submenu {
+	display: none !important;
+}
+
+/* Current section: show submenu inline */
+#adminmenu .wp-has-current-submenu .wp-submenu {
+	display: block !important;
+	position: relative !important;
+	top: auto !important;
+	left: auto !important;
+	width: 100% !important;
+	min-width: 0;
+	margin: 0;
+	padding: 0 0 4px;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+/* Hide duplicate section heading */
+#adminmenu .wp-submenu .wp-submenu-head {
+	display: none;
+}
+
+/* Submenu links */
+#adminmenu .wp-submenu li {
+	margin: 0;
+	padding: 0;
+}
+
+#adminmenu .wp-submenu li a {
+	display: flex;
+	align-items: center;
+	color: #949494 !important;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 20px;
+	padding: 8px 6px 8px 48px !important;
+	min-height: 40px;
+	border-radius: 0;
+	background: transparent !important;
+	box-shadow: none !important;
+	text-decoration: none;
+}
+
+#adminmenu .wp-submenu li a:hover,
+#adminmenu .wp-submenu li a:focus {
+	color: #e0e0e0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+#adminmenu .wp-submenu li.current a,
+#adminmenu .wp-submenu li.current a:hover {
+	background: #2f2f2f !important;
+	color: #fff !important;
+	font-weight: 500;
+	box-shadow: none !important;
+}
+
+/* ==========================================================================
+   6. SEPARATORS
+   ========================================================================== */
+
+#adminmenu li.wp-menu-separator {
+	height: 1px;
+	margin: 8px 16px;
+	padding: 0;
+	background: #2f2f2f;
+	cursor: default;
+}
+
+#adminmenu li.wp-menu-separator div.separator {
+	display: none;
+}
+
+/* ==========================================================================
+   7. DESIGN FOLDER LABEL
+   ========================================================================== */
+
+#adminmenu #nls-design-label > a {
+	pointer-events: none;
+	cursor: default;
+	padding: 16px 16px 4px;
+	min-height: auto;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+#adminmenu #nls-design-label > a:hover,
+#adminmenu #nls-design-label > a:focus {
+	background: transparent !important;
+	color: #949494 !important;
+	box-shadow: none !important;
+}
+
+#adminmenu #nls-design-label .wp-menu-name {
+	color: #949494;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	padding: 0;
+}
+
+#adminmenu #nls-design-label .wp-menu-image {
+	display: none;
+}
+
+#adminmenu #nls-design-label .wp-submenu {
+	display: none !important;
+}
+
+/* ==========================================================================
+   8. DESIGN CHILD ITEMS — same level as root items, icons visible
+   ========================================================================== */
+
+/* No overrides needed — design items inherit the standard root item style */
+
+/* ==========================================================================
+   9. SETTINGS DRILLDOWN — back button + setting items
+   ========================================================================== */
+
+#adminmenu .nls-back-button {
+	margin: 0;
+	padding: 0;
+}
+
+#adminmenu .nls-back-button > a {
+	display: flex;
+	align-items: center;
+	color: #949494;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 20px;
+	padding: 8px 6px 8px 16px;
+	min-height: 40px;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	text-decoration: none;
+}
+
+#adminmenu .nls-back-button > a:hover,
+#adminmenu .nls-back-button > a:focus {
+	color: #e0e0e0;
+	background: transparent;
+	box-shadow: none;
+}
+
+#adminmenu .nls-back-button .wp-menu-image {
+	float: none;
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	margin-right: 8px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+
+#adminmenu .nls-back-button .wp-menu-image .dashicons {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	line-height: 1;
+	color: inherit;
+}
+
+#adminmenu .nls-settings-item {
+	margin: 0;
+	padding: 0;
+}
+
+#adminmenu .nls-settings-item > a {
+	display: flex;
+	align-items: center;
+	color: #949494;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 20px;
+	padding: 8px 6px 8px 48px;
+	min-height: 40px;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	text-decoration: none;
+}
+
+#adminmenu .nls-settings-item > a:hover,
+#adminmenu .nls-settings-item > a:focus {
+	color: #e0e0e0;
+	background: transparent;
+	box-shadow: none;
+}
+
+#adminmenu .nls-settings-item.nls-current > a,
+#adminmenu .nls-settings-item.nls-current > a:hover {
+	background: #2f2f2f;
+	color: #fff;
+	font-weight: 500;
+	box-shadow: none;
+}
+
+/* ==========================================================================
+   10. COLLAPSE BUTTON — hide (not needed in this layout)
+   ========================================================================== */
+
+#collapse-menu,
+#collapse-button {
+	display: none !important;
+}
