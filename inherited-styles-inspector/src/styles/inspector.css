@@ -1,0 +1,153 @@
+/*
+ * Layout only.
+ *
+ * Every control, menu and button comes from @wordpress/components and
+ * @wordpress/ui, so there is no component styling here — just the stage, the
+ * panel card that stands in for the inspector sidebar, and the few rules the
+ * design needs that no component already provides.
+ *
+ * Token names are the @wordpress/theme v3 grammar
+ * (`--wpds-color-<property>-<target>-<tone>`), each verified to exist in the
+ * installed token file. Hardcoded WP admin fallbacks are kept so styling never
+ * silently breaks if a token name shifts again.
+ */
+
+/* ------------------------------------------------------------------ *
+ * Stage: the inspector pinned to the top                              *
+ * ------------------------------------------------------------------ */
+
+/*
+ * Top-aligned, not centered. Showing or hiding a tool changes the panel's
+ * height, and centering would slide the whole inspector up and down as it
+ * grows — so the header and its two menu triggers would move under the
+ * pointer. Pinned to the top, the panel only ever grows downwards.
+ */
+.stage {
+	min-height: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	/*
+	 * Hardcoded: the dimension scale tops out at
+	 * `--wpds-dimension-padding-3xl`, well short of 120px, so there is no
+	 * token that means this. It is stage framing for the prototype, not a
+	 * value the design system has an opinion about.
+	 */
+	padding: 120px;
+	background: var(
+		--wpds-color-background-surface-neutral-weak,
+		#f0f0f0
+	);
+}
+
+/* ------------------------------------------------------------------ *
+ * Panel card — 280px, the real editor sidebar width                   *
+ * ------------------------------------------------------------------ */
+.inspector-panel {
+	width: 280px;
+	background: var( --wpds-color-background-surface-neutral, #fff );
+	border: 1px solid var( --wpds-color-stroke-surface-neutral, #e0e0e0 );
+	/* `lg` is the radius the token reference assigns to cards and dialogs. */
+	border-radius: var( --wpds-border-radius-lg, 8px );
+	box-shadow: 0 4px 24px rgba( 0, 0, 0, 0.08 );
+}
+
+/* ------------------------------------------------------------------ *
+ * Replacement ToolsPanel header (see PanelHeader.jsx)                  *
+ * ------------------------------------------------------------------ */
+.inspector-panel__header {
+	padding: 16px 16px 0;
+}
+
+.inspector-panel__title {
+	margin: 0;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 20px;
+	color: var( --wpds-color-foreground-content-neutral, #1e1e1e );
+}
+
+/*
+ * `ToolsPanel` draws its own top padding under the header it would normally
+ * render; with the header replaced, that padding becomes the gap below ours.
+ */
+.inspector-panel__tools.components-tools-panel {
+	border-top: none;
+	border-bottom: none;
+}
+
+/*
+ * `ToolsPanel` is a two-column grid and `ToolsPanelItem` spans both tracks by
+ * default. The design pairs Line height with Letter spacing, and Columns with
+ * Decoration, so those four take one track each.
+ */
+.inspector-panel__half.components-tools-panel-item {
+	grid-column: span 1;
+}
+
+/* The Color row sits flush at the top, as it does in the editor. */
+.inspector-panel__color-item .components-item-group {
+	width: 100%;
+}
+
+.inspector-panel__color-item .components-item {
+	padding: 10px 12px;
+}
+
+/* Line indent pairs a unit field with a slider on one row. */
+.inspector-panel__indent .components-range-control {
+	flex: 1;
+}
+
+/* ------------------------------------------------------------------ *
+ * Style origins menu                                                  *
+ * ------------------------------------------------------------------ */
+
+/*
+ * `Menu.Popup` otherwise sizes itself to `--wpds-dimension-surface-width-sm`
+ * (320px), clamped by `--available-width` — so without this it is both wider
+ * than designed and liable to collapse when there is little room beside the
+ * panel. The design's 240px is not a magic number: the Figma reads
+ * `wpds-dimension/surface-width/xs`, which is this token.
+ */
+.style-origins {
+	width: var( --wpds-dimension-surface-width-xs, 240px );
+}
+
+/* The section each inherited style resolves to. The design reads
+   `wpds-color/foreground/content/neutral-weak`. */
+.style-origins__source {
+	color: var( --wpds-color-foreground-content-neutral-weak, #707070 );
+}
+
+/*
+ * PLACING CUSTOM ROWS IN `Menu`'s GRID
+ *
+ * `Menu.Popup` lays its list out as a named-line grid, and `Menu.Group`
+ * re-establishes the same tracks inside itself:
+ *
+ *   [item-padding-start] 8px [selection-start] … [prefix-start] …
+ *   [content-start] 1fr [content-end] 8px [item-padding-end]
+ *
+ * `Menu.Item` and `Menu.GroupLabel` place themselves across those lines. A
+ * child that is not a `Menu.*` component gets `grid-column: auto`, so it lands
+ * in the 8px padding track and collapses to nothing. Everything this menu
+ * renders by hand therefore names its track explicitly.
+ */
+
+/* The group label row carries "Reset all" on the right in the first group. */
+.style-origins__group-label {
+	grid-column: content-start / content-end;
+	width: 100%;
+}
+
+/*
+ * Rows are deliberately quiet: no hover highlight, because they are not the
+ * interactive element — the Button at the end of each row is (see
+ * StyleOriginsMenu.jsx).
+ */
+.style-origins__row {
+	grid-column: content-start / content-end;
+	width: 100%;
+	padding-block: var( --wpds-dimension-padding-xs, 4px );
+}
