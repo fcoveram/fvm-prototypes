@@ -4,6 +4,7 @@ Standalone UI prototypes — each a self-contained Vite + React app in its own f
 
 ## Prototypes
 - [editor-header-breadcrumb](https://prototypes.fvm.house/editor-header-breadcrumb/) — a breadcrumb-style document bar for the WordPress block editor.
+- [inherited-styles-inspector](https://prototypes.fvm.house/inherited-styles-inspector/) — a style origins menu for the block editor's inspector, showing which styles are inherited from Styles and which are set on the block.
 - [media-tab-inserter](https://prototypes.fvm.house/media-tab-inserter/) — a redesigned Media tab for the block editor's inserter sidebar.
 - [responsive-dashboard-widget](https://prototypes.fvm.house/responsive-dashboard-widget/) — a WordPress dashboard widget that adapts its layout and content across five size tiers as it's resized on a grid.
 
